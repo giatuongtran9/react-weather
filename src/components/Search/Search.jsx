@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 
 import { GEO_API_URL, geoAPIoptions } from "../../api";
@@ -7,29 +7,26 @@ const Search = ({ onSearchChange }) => {
   const [search, setSearch] = useState("");
 
   const loadOptions = async (inputValue) => {
-
     const response = await fetch(
-        `${GEO_API_URL}/cities?minPopulation=1000000&namePrefix=${inputValue}`,
-        geoAPIoptions
+      `${GEO_API_URL}/cities?minPopulation=1000000&namePrefix=${inputValue}`,
+      geoAPIoptions
     );
-    
+
     const responseJSON = await response.json();
-    
+
     return {
-        options: responseJSON.data.map((city) => {
+      options: responseJSON.data.map((city) => {
         return {
-            value: `${city.latitude} ${city.longitude}`,
-            label: `${city.name}, ${city.countryCode}`,
+          value: `${city.latitude} ${city.longitude}`,
+          label: `${city.name}, ${city.countryCode}`,
         };
-        }),
+      }),
     };
-    
   };
 
   const handleInput = (input) => {
     setSearch(input);
     onSearchChange(input);
-
   };
 
   return (
@@ -41,7 +38,6 @@ const Search = ({ onSearchChange }) => {
         onChange={handleInput}
         loadOptions={loadOptions}
       />
-
     </div>
   );
 };
